@@ -4,8 +4,14 @@ import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Box } from "@react-three/drei";
 import { pointsInner, pointsOuter } from "./rings.js";
+import * as THREE from 'three';
 
-const TShape = (props) => {
+type TShapeProps = {
+  position?: [number, number, number],
+  color?: string,
+};
+
+const TShape = (props: TShapeProps) => {
   return (
     <group {...props} >
       <Box args={[0.2, 1, 0.1]}>
@@ -29,7 +35,7 @@ const TShape = (props) => {
 };
 
 const TShapeRing = () => {
-  const ref = useRef(null);
+  const ref = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (ref.current?.rotation) {
@@ -45,16 +51,10 @@ const TShapeRing = () => {
 
   return (
     <group ref={ref}>
-      {/* {pointsInner.slice(0, limitInner).map((point) => (
-        <TShape key={point.idx} position={point.position} color={point.color} />
-      ))}
-      {pointsOuter.slice(0, limitOutter).map((point) => (
-        <TShape key={point.idx} position={point.position} color={point.color} />
-      ))} */}
-
       {pointsInner.slice(0, limitInner).map((point) => 
         <TShape 
-        key={point.idx} 
+        key={point.idx}
+        // @ts-ignore
         position={point.position.map(p => p * scalingFactorInner)} 
         color={point.color} 
         />
@@ -62,6 +62,7 @@ const TShapeRing = () => {
       {pointsOuter.slice(0, limitOutter).map((point) => 
         <TShape 
         key={point.idx} 
+        // @ts-ignore
         position={point.position.map(p => p * scalingFactorOutter )} 
         color={point.color} 
         />
